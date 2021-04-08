@@ -6,6 +6,8 @@ key_manager = KeyManager()
 
 key_manager.generate_key_for_client_key(client_1.rsa_public_key)
 
+print(client_1.rsa_public_key in key_manager.client_key_map_server_key)
+
 encrypted_keys_and_sign = key_manager.return_encrypted_keys_and_sign(client_1.rsa_public_key)
 print(encrypted_keys_and_sign)
 client_1.decrypt_AES_key(encrypted_keys_and_sign["enc_aes_key"])
@@ -33,6 +35,56 @@ print("Verify Success.")
 
 
 
+
+'''
+from Constant import encrypt_bytes_by_AES, decrypt_bytes_by_AES
+
+aes_key = Random.get_random_bytes(16)
+
+non_encrypt_file = open("../encrypt_file.py", "rb")
+#encrypted_file = open("../encrypted_file_py", "wb+")
+#encrypted_file.write(encrypt_bytes_by_AES(aes_key, non_encrypt_file.read()))
+#encrypted_file = open("../encrypted_file_py", "rb")
+decrypted_file = open("../decrypted_file.py", "w+")
+decrypted_file.write(decrypt_bytes_by_AES(aes_key, encrypt_bytes_by_AES(aes_key, non_encrypt_file.read())).decode("utf-8"))
+
+non_encrypt_file.close()
+#encrypted_file.close()
+decrypted_file.close()
+'''
+
+
+def a(n):
+    if n == 1:
+        return 1, 2, 3, 4
+    else:
+        return "Error"
+    
+print(a(1))
+print(type(a(1)))
+print(a(2))
+print(type(a(2)))
+
+import time
+
+#print(bytes(time.time()))
+time_bytes = bytes(str(time.time()), encoding = "utf-8")
+print(time_bytes + client_1.rsa_public_key)
+
+print(type((1, "1")))
+
+
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
+
+from FileReceiver import FileReceiver
+
+file_receiver = FileReceiver()
+pp.pprint(file_receiver.return_AES_key_Hash1_File_bytes(key_manager, 
+                                                        client_1.rsa_public_key, 
+                                                        client_1.rsa_encrypt_aes_key(), 
+                                                        client_1.aes_encrypt_file_bytes("../encrypt_file.py")))
 
 '''
 # Decrypt AES Key

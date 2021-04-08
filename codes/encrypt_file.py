@@ -10,16 +10,16 @@ AES_KEY_BIT = 128
 AES_KEY_BYTE = 16
 
 
-def encrypt_bytes_by_AES(aes_key, rsa_public_key):
+def encrypt_bytes_by_AES(aes_key, unencrypted_bytes):
     '''
-    Encrypt RSA Public Key by AES Key.
+    Encrypt Bytes by AES Key.
     '''
     cipher_aes = AES.new(aes_key, AES.MODE_EAX)
-    ciphertext, tag = cipher_aes.encrypt_and_digest(rsa_public_key)
+    ciphertext, tag = cipher_aes.encrypt_and_digest(unencrypted_bytes)
     nonce = cipher_aes.nonce
-    enc_rsa_public_key = nonce + tag + ciphertext
+    enc_bytes = nonce + tag + ciphertext
     print("Encrypt RSA Public Key by AES Key Success.")
-    return enc_rsa_public_key
+    return enc_bytes
 
 
 def encrypt_aes_key(rsa_public_key, aes_key):
@@ -55,18 +55,18 @@ def decrypt_AES_key(rsa_private_key, enc_aes_key):
     return decrypted_aes_key
 
 
-def decrypt_bytes_by_AES(aes_key, enc_public_key):
+def decrypt_bytes_by_AES(aes_key, enc_bytes):
     '''
     Decrypt the RSA Public Key by AES Key.
     '''
-    nonce = enc_public_key[0: AES_KEY_BYTE]
-    tag = enc_public_key[AES_KEY_BYTE: 2 * AES_KEY_BYTE]
-    ciphertext = enc_public_key[2 * AES_KEY_BYTE: ]
+    nonce = enc_bytes[0: AES_KEY_BYTE]
+    tag = enc_bytes[AES_KEY_BYTE: 2 * AES_KEY_BYTE]
+    ciphertext = enc_bytes[2 * AES_KEY_BYTE: ]
     cipher_aes = AES.new(aes_key, AES.MODE_EAX, nonce)
     try:
-        server_public_key = cipher_aes.decrypt_and_verify(ciphertext, tag)
+        decypted_bytes = cipher_aes.decrypt_and_verify(ciphertext, tag)
         print("Decrypt Server Public Key Success.")
-        return server_public_key
+        return decypted_bytes
     except (ValueError, TypeError):
         print("Decrypt Server RSA Public Key Failed.")    
         return None
