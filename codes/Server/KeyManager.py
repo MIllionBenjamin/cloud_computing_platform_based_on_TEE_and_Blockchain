@@ -5,7 +5,7 @@ from Crypto.Hash import SHA256
 from Crypto.Signature import pkcs1_15
 
 from Constant import RSA_KEY_LENGTH, AES_KEY_BIT, AES_KEY_BYTE 
-from Constant import encrypt_bytes_by_AES, encrypt_aes_key, sign_encrypted_text, decrypt_AES_key, decrypt_bytes_by_AES
+from Constant import encrypt_bytes_by_AES, encrypt_bytes_by_RSA, sign_encrypted_text, decrypt_bytes_by_RSA, decrypt_bytes_by_AES
 
 class KeyManager:
     def __init__(self):
@@ -43,7 +43,7 @@ class KeyManager:
         rsa_private_key = self.client_key_map_server_key[client_key]["rsa_private_key"]
         
         enc_rsa_public_key = encrypt_bytes_by_AES(aes_key, rsa_public_key)
-        enc_aes_key = encrypt_aes_key(client_key, aes_key)
+        enc_aes_key = encrypt_bytes_by_RSA(client_key, aes_key)
         enc_rsa_public_key_signature = sign_encrypted_text(rsa_private_key, enc_rsa_public_key)
         enc_aes_key_signature = sign_encrypted_text(rsa_private_key, enc_aes_key)
         

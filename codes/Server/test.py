@@ -10,7 +10,7 @@ print(client_1.rsa_public_key in key_manager.client_key_map_server_key)
 
 encrypted_keys_and_sign = key_manager.return_encrypted_keys_and_sign(client_1.rsa_public_key)
 print(encrypted_keys_and_sign)
-client_1.decrypt_AES_key(encrypted_keys_and_sign["enc_aes_key"])
+client_1.decrypt_bytes_by_RSA(encrypted_keys_and_sign["enc_aes_key"])
 client_1.decrypt_server_public_key(encrypted_keys_and_sign["enc_rsa_public_key"])
 client_1.validate_information(encrypted_keys_and_sign["enc_aes_key"], 
                               encrypted_keys_and_sign["enc_rsa_public_key"], 
@@ -81,10 +81,19 @@ pp = pprint.PrettyPrinter(indent=4)
 from FileReceiver import FileReceiver
 
 file_receiver = FileReceiver()
-pp.pprint(file_receiver.return_AES_key_Hash1_File_bytes(key_manager, 
-                                                        client_1.rsa_public_key, 
-                                                        client_1.rsa_encrypt_aes_key(), 
-                                                        client_1.aes_encrypt_file_bytes("../encrypt_file.py")))
+
+task_info = client_1.generate_task("task_1", "../encrypt_file.py")
+result_to_client, result_to_CodeRunner = file_receiver.return_to_client_to_CodeRunner(key_manager, 
+                                             task_info["client_public_key"], 
+                                             task_info["enc_aes_key"], 
+                                             task_info["enc_aes_key_signature"], 
+                                             task_info["enc_task_hash"], 
+                                             task_info["enc_task_hash_signature"], 
+                                             task_info["enc_file_content"], 
+                                             task_info["enc_file_content_signature"])
+
+print(result_to_client)
+print(result_to_CodeRunner)
 
 '''
 # Decrypt AES Key

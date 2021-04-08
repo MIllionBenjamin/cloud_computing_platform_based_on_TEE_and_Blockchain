@@ -5,9 +5,22 @@ from Crypto.Hash import SHA256
 from Crypto.Signature import pkcs1_15
 
 from Constant import RSA_KEY_LENGTH, AES_KEY_BIT, AES_KEY_BYTE 
-from Constant import encrypt_bytes_by_AES, encrypt_aes_key, sign_encrypted_text, decrypt_AES_key, decrypt_bytes_by_AES, validate_signature
+from Constant import encrypt_bytes_by_AES, encrypt_bytes_by_RSA, sign_encrypted_text, decrypt_bytes_by_RSA, decrypt_bytes_by_AES, validate_signature
 
 import os
+import time
+
+class Task:
+    '''
+    To Represent a Task.
+    '''
+    def __init__(self, task_name, create_time, task_file_path, task_hash):
+        self.task_name = task_name
+        self.create_time = create_time
+        self.task_file_path = task_file_path
+        self.task_hash = task_hash
+        self.has_result = False
+        self.result = None
 
 class Client:
     def __init__(self, key_files_path: str = None):
@@ -22,7 +35,10 @@ class Client:
         self.server_public_key_valid = False
         
         self.server_rsa_encrypt_aes_key = None
-        self.task_hash = []
+        '''
+        See Class Task
+        '''
+        self.task_info = []
         #self.AES_KEY_BYTE = 16
         return
     
@@ -32,11 +48,11 @@ class Client:
         '''
         return True if self.aes_key is not None else False
     
-    def decrypt_AES_key(self, enc_aes_key):
+    def decrypt_bytes_by_RSA(self, enc_aes_key):
         '''
         Decrypt the AES key from the server.
         '''
-        self.aes_key = decrypt_AES_key(self.rsa_private_key, enc_aes_key)
+        self.aes_key = decrypt_bytes_by_RSA(self.rsa_private_key, enc_aes_key)
         print("AES Key:", self.aes_key)
         
     def decrypt_server_public_key(self, enc_public_key):
@@ -63,7 +79,7 @@ class Client:
         '''
         if self.server_rsa_encrypt_aes_key is not None:
             return self.server_rsa_encrypt_aes_key
-        self.server_rsa_encrypt_aes_key = encrypt_aes_key(self.server_public_key, self.aes_key)
+        self.server_rsa_encrypt_aes_key = encrypt_bytes_by_RSA(self.server_public_key, self.aes_key)
         return self.server_rsa_encrypt_aes_key
     
     def aes_encrypt_file_bytes(self, file_path):
@@ -74,6 +90,63 @@ class Client:
         enc_file_bytes = encrypt_bytes_by_AES(self.aes_key, read_file.read())
         read_file.close()
         return enc_file_bytes
+    
+    def sign_by_private_key(self, enc_text):
+        '''
+        Use Self Private Key to Sign enc_text
+        '''
+        return sign_encrypted_text(self.rsa_private_key, enc_text)
+    
+    def generate_task(self, task_name, task_file_path):
+        '''
+        Generate a Task. Return the Info that will be sent to FileReceiver on Server.
+        '''
+        # Current Time. E.g. '2021-04-08 16:30:02'
+        time_str_now = time.strftime("%Y-%m-%d %X", time.localtime())
+        
+        # RSA Encrypt aes_key
+        enc_aes_key =  self.rsa_encrypt_aes_key()
+        # Sign enc_aes_key
+        enc_aes_key_signature = self.sign_by_private_key(enc_aes_key)
+        
+        # Generate Task Hash
+        task_hash = SHA256.new(bytes(task_name + time_str_now + task_file_path, encoding = "utf-8")).digest()
+        # RSA Encrypt Task Hash by Server Public Key
+        enc_task_hash = encrypt_bytes_by_RSA(self.server_public_key, task_hash)
+        # Sign enc_task_hash
+        enc_task_hash_signature = self.sign_by_private_key(enc_task_hash)
+        
+        # AES Encrypt File by aes_key
+        enc_file_content = self.aes_encrypt_file_bytes(task_file_path)
+        # Sign enc_file_content
+        enc_file_content_signature = self.sign_by_private_key(enc_file_content)
+        
+        # Create New Task
+        new_task = Task(task_name, 
+                        time_str_now, 
+                        task_file_path, 
+                        task_hash)
+        self.task_info.append(new_task)
+        
+        # Return the Info that will be sent to FileReceiver on Server.
+        return {
+                "client_public_key": self.rsa_public_key,
+                "enc_aes_key": enc_aes_key, 
+                "enc_aes_key_signature": enc_aes_key_signature,
+                "enc_task_hash": enc_task_hash, 
+                "enc_task_hash_signature": enc_task_hash_signature, 
+                "enc_file_content": enc_file_content, 
+                "enc_file_content_signature": enc_file_content_signature
+                }
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
     
     

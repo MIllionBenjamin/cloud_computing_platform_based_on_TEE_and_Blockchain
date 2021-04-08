@@ -22,7 +22,7 @@ def encrypt_bytes_by_AES(aes_key, rsa_public_key):
     return enc_rsa_public_key
 
 
-def encrypt_aes_key(rsa_public_key, aes_key):
+def encrypt_bytes_by_RSA(rsa_public_key, aes_key):
     '''
     Encrypt AES KEY by RSA Public Key.
     '''
@@ -44,7 +44,7 @@ def sign_encrypted_text(rsa_private_key, unsigned_enc_text):
     return enc_text_signature
 
 
-def decrypt_AES_key(rsa_private_key, enc_aes_key):
+def decrypt_bytes_by_RSA(rsa_private_key, enc_aes_key):
     '''
     Decrypt the AES key by RSA Private Key.
     '''
