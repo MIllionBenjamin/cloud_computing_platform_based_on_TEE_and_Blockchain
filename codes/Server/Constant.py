@@ -65,10 +65,10 @@ def decrypt_bytes_by_AES(aes_key, enc_public_key):
     cipher_aes = AES.new(aes_key, AES.MODE_EAX, nonce)
     try:
         server_public_key = cipher_aes.decrypt_and_verify(ciphertext, tag)
-        print("Decrypt Server Public Key Success.")
+        print("Decrypt Bytes by AES Success.")
         return server_public_key
     except (ValueError, TypeError):
-        print("Decrypt Server RSA Public Key Failed.")    
+        print("Decrypt Bytes by AES Fail.")    
         return None
 
 

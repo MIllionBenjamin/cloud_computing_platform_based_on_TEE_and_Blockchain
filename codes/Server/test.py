@@ -95,6 +95,18 @@ result_to_client, result_to_CodeRunner = file_receiver.return_to_client_to_CodeR
 print(result_to_client)
 print(result_to_CodeRunner)
 
+from CodeRunner import CodeRunner
+
+code_runner = CodeRunner()
+run_return = code_runner.run_code_file(result_to_CodeRunner["aes_key"], 
+                                       result_to_CodeRunner["task_hash"], 
+                                       result_to_CodeRunner["file_content"])
+
+print(run_return)
+from Constant import encrypt_bytes_by_AES, decrypt_bytes_by_AES
+print(decrypt_bytes_by_AES(client_1.aes_key, run_return["enc_result"]))
+print(decrypt_bytes_by_AES(client_1.aes_key, run_return["enc_run_info"]))
+
 '''
 # Decrypt AES Key
 imported_rsa_private_key = RSA.importKey(rsa_private_key)
