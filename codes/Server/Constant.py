@@ -5,6 +5,7 @@ from Crypto.Hash import SHA256
 from Crypto.Signature import pkcs1_15
 
 
+
 RSA_KEY_LENGTH = 1024
 AES_KEY_BIT = 128
 AES_KEY_BYTE = 16
@@ -86,4 +87,17 @@ def validate_signature(rsa_public_key, enc_content, signature):
         return False
     
     
-    
+import base64
+
+def bytes_to_base64_str(message_bytes):
+    return base64.b64encode(message_bytes).decode("utf-8")
+
+def base64_str_to_bytes(base64_str: str):
+    return base64.b64decode(base64_str.encode("utf-8"))
+
+'''
+print(bytes("asd", encoding="utf-8"))
+print(type(bytes_to_base64_str(bytes("asd", encoding="utf-8"))))
+print(bytes_to_base64_str(bytes("asd", encoding="utf-8")))
+print(base64_str_to_bytes(bytes_to_base64_str(bytes("asd", encoding="utf-8"))))
+'''

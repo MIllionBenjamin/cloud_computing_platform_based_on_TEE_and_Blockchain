@@ -107,6 +107,16 @@ from Constant import encrypt_bytes_by_AES, decrypt_bytes_by_AES
 print(decrypt_bytes_by_AES(client_1.aes_key, run_return["enc_result"]))
 print(decrypt_bytes_by_AES(client_1.aes_key, run_return["enc_run_info"]))
 
+
+from BlockchainRecorder import BlockchainRecorder
+
+blockchain_recorder = BlockchainRecorder()
+blockchain_recorder.new_record(run_return["task_hash"], 
+                               run_return["enc_result"], 
+                               run_return["enc_run_info"])
+print(blockchain_recorder.all_blocks)
+print(blockchain_recorder.find_block_by_task_hash(run_return["task_hash"]))
+
 '''
 # Decrypt AES Key
 imported_rsa_private_key = RSA.importKey(rsa_private_key)

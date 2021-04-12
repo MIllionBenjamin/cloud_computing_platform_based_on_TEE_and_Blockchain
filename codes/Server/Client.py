@@ -139,27 +139,4 @@ class Client:
                 "enc_file_content_signature": enc_file_content_signature
                 }
         
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-            
-    
-            
 
-        
-    
-    
-    
-    
-        
-    
-        
