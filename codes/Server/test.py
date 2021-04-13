@@ -98,7 +98,8 @@ print(result_to_CodeRunner)
 from CodeRunner import CodeRunner
 
 code_runner = CodeRunner()
-run_return = code_runner.run_code_file(result_to_CodeRunner["aes_key"], 
+run_return = code_runner.run_code_file(result_to_CodeRunner["client_public_key"], 
+                                       result_to_CodeRunner["aes_key"], 
                                        result_to_CodeRunner["task_hash"], 
                                        result_to_CodeRunner["file_content"])
 
@@ -111,11 +112,13 @@ print(decrypt_bytes_by_AES(client_1.aes_key, run_return["enc_run_info"]))
 from BlockchainRecorder import BlockchainRecorder
 
 blockchain_recorder = BlockchainRecorder()
-blockchain_recorder.new_record(run_return["task_hash"], 
+blockchain_recorder.new_record(run_return["client_public_key"], 
+                               run_return["task_hash"], 
                                run_return["enc_result"], 
                                run_return["enc_run_info"])
 print(blockchain_recorder.all_blocks)
 print(blockchain_recorder.find_block_by_task_hash(run_return["task_hash"]))
+print(blockchain_recorder.client_public_key_maps_task_hash)
 
 '''
 # Decrypt AES Key

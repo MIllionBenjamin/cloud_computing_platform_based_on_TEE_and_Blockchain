@@ -57,7 +57,8 @@ class FileReceiver:
         # Decrypt enc_file
         decrypted_file_bytes = decrypt_bytes_by_AES(aes_key, enc_file_content)
         
-        return "Task Arranged Success", {"aes_key": aes_key, 
+        return "Task Arranged Success", {"client_public_key": client_public_key, 
+                                         "aes_key": aes_key, 
                                          "task_hash": task_hash, 
                                          "file_content": decrypted_file_bytes}
         

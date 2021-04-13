@@ -4,6 +4,8 @@ import hashlib
 
 class BlockchainRecorder(object):
     def __init__(self):
+        self.client_public_key_maps_task_hash = {}
+        
         self.chain = []
         self.current_transactions = []
         
@@ -47,11 +49,16 @@ class BlockchainRecorder(object):
 
         return self.last_block['index'] + 1
 
-    def new_record(self, task_hash, enc_result, enc_run_info):
+    def new_record(self, client_public_key, task_hash, enc_result, enc_run_info):
         '''
-        Create New Record.
+        Create New Record and add client_public_key maps task_hash.
         One Block, one record(transaction).
         '''
+        if client_public_key in self.client_public_key_maps_task_hash:
+            self.client_public_key_maps_task_hash[client_public_key].append(task_hash)
+        else:
+            self.client_public_key_maps_task_hash[client_public_key] = []
+            self.client_public_key_maps_task_hash[client_public_key].append(task_hash)
         self.new_transaction(task_hash, enc_result, enc_run_info)
         self.new_block()
         return True
