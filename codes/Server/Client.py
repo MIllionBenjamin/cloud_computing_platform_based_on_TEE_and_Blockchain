@@ -21,6 +21,7 @@ class Task:
         self.task_hash = task_hash
         self.has_result = False
         self.result = None
+        self.run_info = None
 
 class Client:
     def __init__(self, key_files_path: str = None):
@@ -147,10 +148,21 @@ class Client:
             block_bytes += block["transactions"][0]["task_hash"] + block["transactions"][0]["enc_result"] + block["transactions"][0]["enc_run_info"]
         return validate_signature(self.server_public_key, block_bytes, signature)
     
-    def decrypt_results(self, enc_result, enc_run_info):
+    def decrypt_and_save_results(self, block):
+        '''
+        Decrypt results and update self.task_info
+        '''
+        task_hash = block["transactions"][0]["task_hash"]
+        result = str(decrypt_bytes_by_AES(self.aes_key, block["transactions"][0]["enc_result"]), encoding = "utf-8")
+        run_info = str(decrypt_bytes_by_AES(self.aes_key, block["transactions"][0]["enc_run_info"]), encoding = "utf-8")
+        for task in self.task_info:
+            if task.task_hash == task_hash:
+                task.has_result = True
+                task.result = result
+                task.run_info = run_info
         return {
-            "enc_result": str(decrypt_bytes_by_AES(self.aes_key, enc_result), encoding = "utf-8"), 
-            "enc_run_info": str(decrypt_bytes_by_AES(self.aes_key, enc_run_info), encoding = "utf-8")
+            "enc_result": result, 
+            "enc_run_info": run_info
         }
         
     

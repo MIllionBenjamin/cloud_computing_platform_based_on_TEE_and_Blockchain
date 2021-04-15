@@ -125,7 +125,7 @@ block_result = blockchain_recorder.return_block_and_signature(run_return["task_h
 print(block_result)
 
 print(client_1.validate_block(block_result["block"], block_result["signature"]))
-print(client_1.decrypt_results(block_result["block"]["transactions"][0]["enc_result"], block_result["block"]["transactions"][0]["enc_run_info"]))
+print(client_1.decrypt_and_save_results(block_result["block"]))
 
 
 '''
