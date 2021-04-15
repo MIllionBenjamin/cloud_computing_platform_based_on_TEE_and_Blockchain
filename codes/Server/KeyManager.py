@@ -33,6 +33,9 @@ class KeyManager:
                                                       "rsa_public_key": rsa_public_key, 
                                                       "aes_key": aes_key}
         print("Successfully Create Keys Pair")
+        
+    def get_keys_by_client_key(self, client_key):
+        return self.client_key_map_server_key[client_key]
 
     def return_encrypted_keys_and_sign(self, client_key):
         if client_key not in self.client_key_map_server_key:

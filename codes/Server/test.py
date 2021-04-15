@@ -10,7 +10,7 @@ print(client_1.rsa_public_key in key_manager.client_key_map_server_key)
 
 encrypted_keys_and_sign = key_manager.return_encrypted_keys_and_sign(client_1.rsa_public_key)
 print(encrypted_keys_and_sign)
-client_1.decrypt_bytes_by_RSA(encrypted_keys_and_sign["enc_aes_key"])
+client_1.decrypt_AES_key(encrypted_keys_and_sign["enc_aes_key"])
 client_1.decrypt_server_public_key(encrypted_keys_and_sign["enc_rsa_public_key"])
 client_1.validate_information(encrypted_keys_and_sign["enc_aes_key"], 
                               encrypted_keys_and_sign["enc_rsa_public_key"], 
@@ -83,7 +83,7 @@ from FileReceiver import FileReceiver
 file_receiver = FileReceiver()
 
 task_info = client_1.generate_task("task_1", "../encrypt_file.py")
-result_to_client, result_to_CodeRunner = file_receiver.return_to_client_to_CodeRunner(key_manager, 
+result_to_client, result_to_CodeRunner = file_receiver.validate_and_decrypt_task_info(key_manager, 
                                              task_info["client_public_key"], 
                                              task_info["enc_aes_key"], 
                                              task_info["enc_aes_key_signature"], 
@@ -111,14 +111,22 @@ print(decrypt_bytes_by_AES(client_1.aes_key, run_return["enc_run_info"]))
 
 from BlockchainRecorder import BlockchainRecorder
 
+from Constant import bytes_to_base64_str
 blockchain_recorder = BlockchainRecorder()
+
 blockchain_recorder.new_record(run_return["client_public_key"], 
                                run_return["task_hash"], 
                                run_return["enc_result"], 
                                run_return["enc_run_info"])
 print(blockchain_recorder.all_blocks)
-print(blockchain_recorder.find_block_by_task_hash(run_return["task_hash"]))
 print(blockchain_recorder.client_public_key_maps_task_hash)
+
+block_result = blockchain_recorder.return_block_and_signature(run_return["task_hash"], key_manager)
+print(block_result)
+
+print(client_1.validate_block(block_result["block"], block_result["signature"]))
+print(client_1.decrypt_results(block_result["block"]["transactions"][0]["enc_result"], block_result["block"]["transactions"][0]["enc_run_info"]))
+
 
 '''
 # Decrypt AES Key

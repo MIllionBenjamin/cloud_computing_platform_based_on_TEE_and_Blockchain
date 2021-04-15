@@ -48,7 +48,8 @@ class Client:
         '''
         return True if self.aes_key is not None else False
     
-    def decrypt_bytes_by_RSA(self, enc_aes_key):
+    
+    def decrypt_AES_key(self, enc_aes_key):
         '''
         Decrypt the AES key from the server.
         '''
@@ -138,5 +139,19 @@ class Client:
                 "enc_file_content": enc_file_content, 
                 "enc_file_content_signature": enc_file_content_signature
                 }
+    
+    
+    def validate_block(self, block, signature):
+        block_bytes = bytes(str(block["index"]) + str(block["timestamp"]), encoding = "utf-8") + block["previous_hash"]
+        if block["transactions"]:
+            block_bytes += block["transactions"][0]["task_hash"] + block["transactions"][0]["enc_result"] + block["transactions"][0]["enc_run_info"]
+        return validate_signature(self.server_public_key, block_bytes, signature)
+    
+    def decrypt_results(self, enc_result, enc_run_info):
+        return {
+            "enc_result": str(decrypt_bytes_by_AES(self.aes_key, enc_result), encoding = "utf-8"), 
+            "enc_run_info": str(decrypt_bytes_by_AES(self.aes_key, enc_run_info), encoding = "utf-8")
+        }
         
+    
 

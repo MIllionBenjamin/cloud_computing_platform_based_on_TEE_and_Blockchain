@@ -13,7 +13,7 @@ class FileReceiver:
     def __init__(self):
         return
     
-    def return_to_client_to_CodeRunner(self, 
+    def validate_and_decrypt_task_info(self, 
                                         key_manager: KeyManager, 
                                         client_public_key, 
                                         enc_aes_key, 

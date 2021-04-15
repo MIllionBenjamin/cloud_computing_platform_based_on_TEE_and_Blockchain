@@ -49,7 +49,8 @@ class CodeRunner:
             result_text = run_code_file_process.stderr
             if result_text is None:
                 result_text = "Run Code Fail but No Output.\n"
-        result_bytes = bytes(str(result_text), encoding = "utf-8")
+        
+        result_bytes = bytes(str(result_text), encoding = "utf-8") if type(result_text) is not bytes else result_text
         run_elapsed_time_text = str(round(time.time() - run_begin_time, 4)) + 's'
         run_elapsed_time_bytes = bytes(run_elapsed_time_text, encoding = "utf-8")
         
