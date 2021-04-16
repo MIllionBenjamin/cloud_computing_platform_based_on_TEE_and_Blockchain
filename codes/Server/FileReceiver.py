@@ -15,13 +15,13 @@ class FileReceiver:
     
     def validate_and_decrypt_task_info(self, 
                                         key_manager: KeyManager, 
-                                        client_public_key, 
-                                        enc_aes_key, 
-                                        enc_aes_key_signature, 
-                                        enc_task_hash,
-                                        enc_task_hash_signature, 
-                                        enc_file_content, 
-                                        enc_file_content_signature):
+                                        client_public_key: bytes, 
+                                        enc_aes_key: bytes, 
+                                        enc_aes_key_signature: bytes, 
+                                        enc_task_hash: bytes,
+                                        enc_task_hash_signature: bytes, 
+                                        enc_file_content: bytes, 
+                                        enc_file_content_signature: bytes):
         '''
         Receive Info From Client and Process it.
         Return: [0] is to Client.

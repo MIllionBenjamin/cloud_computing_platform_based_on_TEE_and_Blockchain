@@ -15,7 +15,10 @@ class CodeRunner:
     def __init__(self):
         return
     
-    def run_code_file(self, client_public_key, aes_key, task_hash, file_content: bytes):
+    def run_code_file(self, client_public_key: bytes, 
+                            aes_key: bytes, 
+                            task_hash: bytes, 
+                            file_content: bytes) -> dict:
         '''
         Run Codes in the File. 
         Return task_hash, encrypted result and encrypted run_info (Now the Elapsed Time).

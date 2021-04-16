@@ -21,7 +21,7 @@ class KeyManager:
             并且，密钥管理器保存KRA pub与KRS及KA的对应关系。
             客户端A先用KRA pri对密文解密得到KA，再用KA解密得到KRS pub，KRS pub对密文进行验签，验签成功说明得到的KRS pub和KA可信。
     '''
-    def generate_key_for_client_key(self, client_key):
+    def generate_key_for_client_key(self, client_key: bytes) -> None:
         if client_key in self.client_key_map_server_key:
             print("Keys Pair Already Exists")
         random_generator = Random.new().read
@@ -34,10 +34,10 @@ class KeyManager:
                                                       "aes_key": aes_key}
         print("Successfully Create Keys Pair")
         
-    def get_keys_by_client_key(self, client_key):
+    def get_keys_by_client_key(self, client_key: bytes) -> dict:
         return self.client_key_map_server_key[client_key]
 
-    def return_encrypted_keys_and_sign(self, client_key):
+    def return_encrypted_keys_and_sign(self, client_key: bytes) -> dict:
         if client_key not in self.client_key_map_server_key:
             self.generate_key_for_client_key(client_key)
         

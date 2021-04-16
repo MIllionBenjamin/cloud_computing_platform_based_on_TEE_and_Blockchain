@@ -50,14 +50,14 @@ class Client:
         return True if self.aes_key is not None else False
     
     
-    def decrypt_AES_key(self, enc_aes_key):
+    def decrypt_AES_key(self, enc_aes_key: bytes) -> None:
         '''
         Decrypt the AES key from the server.
         '''
         self.aes_key = decrypt_bytes_by_RSA(self.rsa_private_key, enc_aes_key)
         print("AES Key:", self.aes_key)
         
-    def decrypt_server_public_key(self, enc_public_key):
+    def decrypt_server_public_key(self, enc_public_key: bytes) -> None:
         '''
         Decrypt the RSA Public Key by AES Key.
         '''
@@ -75,7 +75,7 @@ class Client:
             self.server_public_key_valid = True
             print("Server Public Key Valid:", self.server_public_key_valid)
             
-    def rsa_encrypt_aes_key(self):
+    def rsa_encrypt_aes_key(self) -> bytes:
         '''
         Use Server Public Key to Encrypt AES Key. Return it.
         '''
@@ -84,7 +84,7 @@ class Client:
         self.server_rsa_encrypt_aes_key = encrypt_bytes_by_RSA(self.server_public_key, self.aes_key)
         return self.server_rsa_encrypt_aes_key
     
-    def aes_encrypt_file_bytes(self, file_path):
+    def aes_encrypt_file_bytes(self, file_path: str) -> bytes:
         '''
         Use AES Key to Encrypt File Bytes. Return the Encrypted Content.
         '''
@@ -93,13 +93,13 @@ class Client:
         read_file.close()
         return enc_file_bytes
     
-    def sign_by_private_key(self, enc_text):
+    def sign_by_private_key(self, enc_text: bytes) -> bytes:
         '''
         Use Self Private Key to Sign enc_text
         '''
         return sign_encrypted_text(self.rsa_private_key, enc_text)
     
-    def generate_task(self, task_name, task_file_path):
+    def generate_task(self, task_name: str, task_file_path: str) -> dict:
         '''
         Generate a Task. Return the Info that will be sent to FileReceiver on Server.
         '''
@@ -142,13 +142,13 @@ class Client:
                 }
     
     
-    def validate_block(self, block, signature):
+    def validate_block(self, block: dict, signature: bytes) -> bool:
         block_bytes = bytes(str(block["index"]) + str(block["timestamp"]), encoding = "utf-8") + block["previous_hash"]
         if block["transactions"]:
             block_bytes += block["transactions"][0]["task_hash"] + block["transactions"][0]["enc_result"] + block["transactions"][0]["enc_run_info"]
         return validate_signature(self.server_public_key, block_bytes, signature)
     
-    def decrypt_and_save_results(self, block):
+    def decrypt_and_save_results(self, block: dict) -> dict:
         '''
         Decrypt results and update self.task_info
         '''
@@ -161,8 +161,8 @@ class Client:
                 task.result = result
                 task.run_info = run_info
         return {
-            "enc_result": result, 
-            "enc_run_info": run_info
+            "result": result, 
+            "run_info": run_info
         }
         
     

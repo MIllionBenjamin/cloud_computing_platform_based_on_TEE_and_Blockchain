@@ -17,7 +17,7 @@ class BlockchainRecorder(object):
         # Create Genesis Block
         self.new_block(previous_hash=bytes('1', encoding="utf-8"))
 
-    def new_block(self, previous_hash=None):
+    def new_block(self, previous_hash: bytes = None):
         """
         Create a new Block in the Blockchain
         :param proof: <int> The proof given by the Proof of Work algorithm
