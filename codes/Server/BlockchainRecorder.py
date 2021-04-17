@@ -20,7 +20,7 @@ class BlockchainRecorder(object):
     def new_block(self, previous_hash: bytes = None):
         """
         Create a new Block in the Blockchain
-        :param proof: <int> The proof given by the Proof of Work algorithm
+        
         :param previous_hash: (Optional) <str> Hash of previous Block
         :return: <dict> New Block
         """
@@ -39,7 +39,7 @@ class BlockchainRecorder(object):
         return block
 
 
-    def new_transaction(self, task_hash, enc_result, enc_run_info):
+    def new_transaction(self, task_hash: bytes, enc_result: bytes, enc_run_info: bytes) -> int:
         '''
         Adds a new transaction to the list of transactions.
         The transaction is exactly the recorder of code running.
@@ -54,7 +54,7 @@ class BlockchainRecorder(object):
 
         return self.last_block['index'] + 1
 
-    def new_record(self, client_public_key, task_hash, enc_result, enc_run_info):
+    def new_record(self, client_public_key: bytes, task_hash: bytes, enc_result: bytes, enc_run_info: bytes) -> bool:
         '''
         Create New Record and add client_public_key maps task_hash.
         One Block, one record(transaction).
@@ -68,8 +68,8 @@ class BlockchainRecorder(object):
         self.new_block()
         return True
     
-    @staticmethod
-    def generate_block_bytes(block):
+    
+    def generate_block_bytes(self, block: bytes):
         '''
         Generate Block Bytes in Specific Method.
         '''
@@ -91,7 +91,7 @@ class BlockchainRecorder(object):
         return SHA256.new(self.generate_block_bytes(block)).digest()
 
     
-    def find_client_key_by_task_hash(self, task_hash):
+    def find_client_key_by_task_hash(self, task_hash: bytes) -> bytes:
         '''
         Return the client key which has the given tsak_hash.
         '''
@@ -100,7 +100,7 @@ class BlockchainRecorder(object):
                 return client_key
         return None
     
-    def find_block_by_task_hash(self, task_hash):
+    def find_block_by_task_hash(self, task_hash: bytes):
         '''
         Return the block whose task_hash is the same as given task_hash.
         '''
@@ -109,7 +109,7 @@ class BlockchainRecorder(object):
                 return block
         return None
     
-    def return_block_and_signature(self, task_hash, key_manager: KeyManager):
+    def return_block_and_signature(self, task_hash: bytes, key_manager: KeyManager) -> dict:
         '''
         Use task_hash and self.client_public_key_maps_task_hash to find the client pub key.
         Use client pub key to find corresponding server pri key in key_manager.
