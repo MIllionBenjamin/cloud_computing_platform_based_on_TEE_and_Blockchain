@@ -9,6 +9,7 @@ from Constant import encrypt_bytes_by_AES, encrypt_bytes_by_RSA, sign_encrypted_
 
 import os
 import time
+import numpy as np
 
 class Task:
     '''
@@ -24,22 +25,31 @@ class Task:
         self.run_info = None
 
 class Client:
-    def __init__(self, key_files_path: str = None):
-        random_generator = Random.new().read
-        rsa_key_pair = RSA.generate(RSA_KEY_LENGTH, random_generator)
-        
-        self.rsa_private_key = rsa_key_pair.export_key()
-        self.rsa_public_key = rsa_key_pair.publickey().export_key()
+    def __init__(self, config_dict: dict = None):
+        '''
+        config_dict has rsa_private_key, rsa_public_key and task_info
+        '''
+        self.rsa_private_key = None
+        self.rsa_public_key = None
+        #See Class Task
+        self.task_info = []
+        if config_dict is None:
+            random_generator = Random.new().read
+            rsa_key_pair = RSA.generate(RSA_KEY_LENGTH, random_generator)
+            self.rsa_private_key = rsa_key_pair.export_key()    
+            self.rsa_public_key = rsa_key_pair.publickey().export_key()
+        else:
+            self.rsa_private_key = config_dict["rsa_private_key"]
+            self.rsa_public_key = config_dict["rsa_public_key"]
+            self.task_info = config_dict["task_info"]
+            
         self.aes_key = None
         self.aes_key_valid = False
         self.server_public_key = None
         self.server_public_key_valid = False
         
         self.server_rsa_encrypt_aes_key = None
-        '''
-        See Class Task
-        '''
-        self.task_info = []
+        
         #self.AES_KEY_BYTE = 16
         return
     

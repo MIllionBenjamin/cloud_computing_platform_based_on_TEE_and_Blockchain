@@ -95,6 +95,39 @@ def bytes_to_base64_str(message_bytes):
 def base64_str_to_bytes(base64_str: str):
     return base64.b64decode(base64_str.encode("utf-8"))
 
+def dic_bytes_content_to_base64(dic_with_bytes: dict) -> dict:
+    '''
+    If dic_with_bytes[key]'s type is bytes, convert dic_with_bytes[key] to base64 str;
+    Else keep original content unchanged.
+    Especially, if dic_with_bytes[key] is a list, consider it as a block(see BlockchainRecorder)
+    '''
+    dic_with_base64 = {}
+    for key in dic_with_bytes:
+        if type(dic_with_bytes[key]) is bytes:
+            dic_with_base64[key] = bytes_to_base64_str(dic_with_bytes[key])
+        elif type(dic_with_bytes[key]) is list:
+            list_with_base64 = []
+            for item in dic_with_bytes[key]:
+                list_with_base64.append(dic_bytes_content_to_base64(item))
+            dic_with_base64[key] = list_with_base64
+        elif type(dic_with_bytes[key]) is dict:
+            dic_with_base64[key] = dic_bytes_content_to_base64(dic_with_bytes[key])
+        else:
+            dic_with_base64[key] = dic_with_bytes[key]
+    return dic_with_base64
+
+
+def dic_base64_to_bytes(dic_all_base64: dict) -> dict:
+    '''
+    Convert all base64 strings in dict to bytes
+    '''
+    dic_all_bytes = {}
+    for key in dic_all_base64:
+        dic_all_bytes[key] = base64_str_to_bytes(dic_all_base64[key])
+    return dic_all_bytes
+    
+
+
 '''
 print(bytes("asd", encoding="utf-8"))
 print(type(bytes_to_base64_str(bytes("asd", encoding="utf-8"))))
