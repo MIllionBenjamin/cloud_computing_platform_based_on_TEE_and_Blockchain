@@ -1,0 +1,3 @@
+task_name,create_time,task_file_path,task_hash,has_result,result,run_info
+task_hello,2021-04-27 14:16:28,./task_file/hello_world.py,"b'\n\x0fu\x04\xff\xb7\xefP\x06\xd1\xbe\xa9\x8a""3m\xb2\x1e\x88f\x0c\\\xa0e\x95U\xba\x86s\x82\xe1\xd8'",True,"hello_world.py
+",0.0294s

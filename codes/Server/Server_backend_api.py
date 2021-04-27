@@ -60,22 +60,6 @@ class Task(MethodView):
         return jsonify({"task_arranged_status": to_client})
 app.add_url_rule('/task', view_func = Task.as_view(name='task'))
 
-'''
-@app.route('/task', methods=['POST'])
-def task():
-    json_data = request.get_json(force=True)
-    json_dic = dic_base64_to_bytes(json_data)
-    to_client, to_code_runner = file_receiver.validate_and_decrypt_task_info(key_manager, 
-                                                               json_dic["client_key"], 
-                                                               json_dic["enc_aes_key"], 
-                                                               json_dic["enc_aes_key_signature"], 
-                                                               json_dic["enc_task_hash"], 
-                                                               json_dic["enc_task_hash_signature"], 
-                                                               json_dic["enc_file_content"], 
-                                                               json_dic["enc_file_content_signature"])
-    executor.submit(run_and_record, to_code_runner)
-    return jsonify({"task_arranged_status": to_client})
-'''
 
 class Block(MethodView):
     def get(self):
@@ -92,11 +76,6 @@ class Block(MethodView):
                 all_blocks_base64.append(dic_bytes_content_to_base64(block))
             return jsonify(all_blocks_base64)
 app.add_url_rule('/block', view_func = Block.as_view(name='block'))
-            
-            
-        
-        
-
 
 
 if __name__ == '__main__':
