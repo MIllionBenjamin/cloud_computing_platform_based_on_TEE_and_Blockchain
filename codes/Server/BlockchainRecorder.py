@@ -118,6 +118,9 @@ class BlockchainRecorder(object):
         Return the block and the signature
         '''
         client_key = self.find_client_key_by_task_hash(task_hash)
+        if client_key is None:
+            return {"block": None, 
+                    "Info": "Result Not Found"}
         server_pri_key = key_manager.client_key_map_server_key[client_key]["rsa_private_key"]
         block = self.find_block_by_task_hash(task_hash)
         block_bytes = self.generate_block_bytes(block)

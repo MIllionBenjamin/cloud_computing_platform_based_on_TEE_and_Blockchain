@@ -128,6 +128,23 @@ print(client_1.validate_block(block_result["block"], block_result["signature"]))
 print(client_1.decrypt_and_save_results(block_result["block"]))
 
 
+from Client import Task
+
+task_list = []
+task_1 = Task("1", "2", "3", "4")
+#task_list.append(task_1)
+#task_list.append(task_1)
+
+import numpy as np
+
+np.save("task.npy", task_list)
+t = np.load("task.npy", allow_pickle=True)
+print(list(t))
+print(type(list(t)))
+
+        
+
+
 '''
 # Decrypt AES Key
 imported_rsa_private_key = RSA.importKey(rsa_private_key)

@@ -19,7 +19,7 @@ def encrypt_bytes_by_AES(aes_key, rsa_public_key):
     ciphertext, tag = cipher_aes.encrypt_and_digest(rsa_public_key)
     nonce = cipher_aes.nonce
     enc_rsa_public_key = nonce + tag + ciphertext
-    print("Encrypt RSA Public Key by AES Key Success.")
+    print("Encrypt Bytes by AES Success.")
     return enc_rsa_public_key
 
 
@@ -30,7 +30,7 @@ def encrypt_bytes_by_RSA(rsa_public_key, aes_key):
     client_public_key = RSA.importKey(rsa_public_key)
     cipher_rsa = PKCS1_OAEP.new(client_public_key)
     enc_aes_key = cipher_rsa.encrypt(aes_key)
-    print("Encrypt AES Key by RSA Public Key Success.")
+    print("Encrypt Bytes by RSA Public Key Success.")
     return enc_aes_key
 
 
@@ -52,7 +52,6 @@ def decrypt_bytes_by_RSA(rsa_private_key, enc_aes_key):
     imported_rsa_private_key = RSA.importKey(rsa_private_key)
     cipher_rsa = PKCS1_OAEP.new(imported_rsa_private_key)
     decrypted_aes_key = cipher_rsa.decrypt(enc_aes_key)
-    print("Decrypt AES Key Success.")
     return decrypted_aes_key
 
 
@@ -66,10 +65,10 @@ def decrypt_bytes_by_AES(aes_key, enc_public_key):
     cipher_aes = AES.new(aes_key, AES.MODE_EAX, nonce)
     try:
         server_public_key = cipher_aes.decrypt_and_verify(ciphertext, tag)
-        print("Decrypt Bytes by AES Success.")
+        #print("Decrypt Bytes by AES Success.")
         return server_public_key
     except (ValueError, TypeError):
-        print("Decrypt Bytes by AES Fail.")    
+        #print("Decrypt Bytes by AES Fail.")    
         return None
 
 

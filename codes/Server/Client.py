@@ -142,7 +142,7 @@ class Client:
         
         # Return the Info that will be sent to FileReceiver on Server.
         return {
-                "client_public_key": self.rsa_public_key,
+                "client_key": self.rsa_public_key,
                 "enc_aes_key": enc_aes_key, 
                 "enc_aes_key_signature": enc_aes_key_signature,
                 "enc_task_hash": enc_task_hash, 
