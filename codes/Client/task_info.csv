@@ -1,3 +1,35 @@
 task_name,create_time,task_file_path,task_hash,has_result,result,run_info
-task_hello,2021-04-27 14:16:28,./task_file/hello_world.py,"b'\n\x0fu\x04\xff\xb7\xefP\x06\xd1\xbe\xa9\x8a""3m\xb2\x1e\x88f\x0c\\\xa0e\x95U\xba\x86s\x82\xe1\xd8'",True,"hello_world.py
-",0.0294s
+hello_task,2021-05-13 15:36:43,./task_file/hello_world.py,b'\xdc\xad`H\xa0\xd3\xcdu&a\x910\x89\x158b8;/\x18(-\xc3\n\xa1\xe2\xd9\xee\x14)\xc6\x99',True,"/root/occlum/demos/python
+/root/occlum/demos/python/occlum_instance initialized as an Occlum instance
+Enclave sign-tool: /opt/occlum/sgxsdk-tools/bin/x64/sgx_sign
+Enclave sign-key: /opt/occlum/etc/template/Enclave.pem
+SGX mode: SIM
+Building new image...
+[+] Home dir is /root
+[+] Open token file success! 
+[+] Token file valid!
+[+] Init Enclave Successful 6622839570434!
+Building libOS...
+EXPORT => OCCLUM_BUILTIN_CONF_FILE_MAC = f8-38-0f-12-fc-92-71-9f-83-23-7e-d9-21-78-5c-d8
+Signing the enclave...
+<EnclaveConfiguration>
+    <ProdID>0</ProdID>
+    <ISVSVN>0</ISVSVN>
+    <StackMaxSize>1048576</StackMaxSize>
+    <StackMinSize>1048576</StackMinSize>
+    <HeapMaxSize>268435456</HeapMaxSize>
+    <HeapMinSize>268435456</HeapMinSize>
+    <TCSNum>32</TCSNum>
+    <TCSPolicy>1</TCSPolicy>
+    <DisableDebug>0</DisableDebug>
+    <MiscSelect>0</MiscSelect>
+    <MiscMask>0xFFFFFFFF</MiscMask>
+    <ReservedMemMaxSize>335544320</ReservedMemMaxSize>
+    <ReservedMemMinSize>335544320</ReservedMemMinSize>
+    <ReservedMemInitSize>335544320</ReservedMemInitSize>
+    <ReservedMemExecutable>1</ReservedMemExecutable>
+</EnclaveConfiguration>
+Built the Occlum image and enclave successfully
+-e [1;34mocclum run /bin/python3.7 server_backend_api.py[0m
+hello_world.py
+",46.63s
